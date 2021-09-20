@@ -19,7 +19,8 @@ jobs:
             cmake pkg-config libssl-dev git clang curl libc6-dev
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly-2021-03-15
+          profile: minimal
+          override: true
       - run: rustup component add rustfmt
       - name: fmt
         uses: actions-rs/cargo@v1
