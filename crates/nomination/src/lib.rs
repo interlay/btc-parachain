@@ -208,12 +208,7 @@ impl<T: Config> Pallet<T> {
         // Withdraw all vault rewards first, to prevent the nominator from withdrawing past rewards
         ext::fee::withdraw_all_vault_rewards::<T>(&vault_id)?;
         // Withdraw `amount` of stake from the vault staking pool
-        ext::staking::withdraw_stake::<T>(
-            T::GetWrappedCurrencyId::get(),
-            &vault_id,
-            &nominator_id,
-            amount.to_signed_fixed_point()?,
-        )?;
+        ext::staking::withdraw_stake::<T>(&vault_id, &nominator_id, amount.to_signed_fixed_point()?)?;
         amount.unlock_on(&vault_id)?;
         amount.transfer(&vault_id, &nominator_id)?;
         ext::vault_registry::decrease_total_backing_collateral(&amount)?;
@@ -248,12 +243,7 @@ impl<T: Config> Pallet<T> {
         ext::fee::withdraw_all_vault_rewards::<T>(&vault_id)?;
 
         // Deposit `amount` of stake into the vault staking pool
-        ext::staking::deposit_stake::<T>(
-            T::GetWrappedCurrencyId::get(),
-            &vault_id,
-            &nominator_id,
-            amount.to_signed_fixed_point()?,
-        )?;
+        ext::staking::deposit_stake::<T>(&vault_id, &nominator_id, amount.to_signed_fixed_point()?)?;
         amount.transfer(&nominator_id, &vault_id)?;
         amount.lock_on(&vault_id)?;
         ext::vault_registry::try_increase_total_backing_collateral(&amount)?;
