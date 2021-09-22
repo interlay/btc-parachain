@@ -70,21 +70,19 @@ pub(crate) mod staking {
     use vault_registry::types::CurrencyId;
 
     pub fn deposit_stake<T: crate::Config>(
-        currency_id: CurrencyId<T>,
         vault_id: &T::AccountId,
         nominator_id: &T::AccountId,
         amount: SignedFixedPoint<T>,
     ) -> Result<(), DispatchError> {
-        <staking::Pallet<T>>::deposit_stake(currency_id, vault_id, nominator_id, amount)
+        <staking::Pallet<T>>::deposit_stake(vault_id, nominator_id, amount)
     }
 
     pub fn withdraw_stake<T: crate::Config>(
-        currency_id: CurrencyId<T>,
         vault_id: &T::AccountId,
         nominator_id: &T::AccountId,
         amount: SignedFixedPoint<T>,
     ) -> Result<(), DispatchError> {
-        <staking::Pallet<T>>::withdraw_stake(currency_id, vault_id, nominator_id, amount)
+        <staking::Pallet<T>>::withdraw_stake(vault_id, nominator_id, amount)
     }
 
     pub fn compute_stake<T: vault_registry::Config>(

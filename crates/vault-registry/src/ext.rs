@@ -30,34 +30,28 @@ pub(crate) mod security {
 
 #[cfg_attr(test, mockable)]
 pub(crate) mod staking {
-    use crate::types::{CurrencyId, SignedInner};
+    use crate::types::SignedInner;
     use currency::Amount;
     use frame_support::dispatch::DispatchError;
 
     pub fn deposit_stake<T: crate::Config>(
-        currency_id: CurrencyId<T>,
         vault_id: &T::AccountId,
         nominator_id: &T::AccountId,
         amount: &Amount<T>,
     ) -> Result<(), DispatchError> {
-        <staking::Pallet<T>>::deposit_stake(currency_id, vault_id, nominator_id, amount.to_signed_fixed_point()?)
+        <staking::Pallet<T>>::deposit_stake(vault_id, nominator_id, amount.to_signed_fixed_point()?)
     }
 
     pub fn withdraw_stake<T: crate::Config>(
-        currency_id: CurrencyId<T>,
         vault_id: &T::AccountId,
         nominator_id: &T::AccountId,
         amount: &Amount<T>,
     ) -> Result<(), DispatchError> {
-        <staking::Pallet<T>>::withdraw_stake(currency_id, vault_id, nominator_id, amount.to_signed_fixed_point()?)
+        <staking::Pallet<T>>::withdraw_stake(vault_id, nominator_id, amount.to_signed_fixed_point()?)
     }
 
-    pub fn slash_stake<T: crate::Config>(
-        currency_id: CurrencyId<T>,
-        vault_id: &T::AccountId,
-        amount: &Amount<T>,
-    ) -> Result<(), DispatchError> {
-        <staking::Pallet<T>>::slash_stake(currency_id, vault_id, amount.to_signed_fixed_point()?)
+    pub fn slash_stake<T: crate::Config>(vault_id: &T::AccountId, amount: &Amount<T>) -> Result<(), DispatchError> {
+        <staking::Pallet<T>>::slash_stake(vault_id, amount.to_signed_fixed_point()?)
     }
 
     pub fn compute_stake<T: crate::Config>(
@@ -75,22 +69,14 @@ pub(crate) mod staking {
 #[cfg_attr(test, mockable)]
 pub(crate) mod reward {
     use currency::Amount;
-    use frame_support::{dispatch::DispatchError, traits::Get};
+    use frame_support::dispatch::DispatchError;
 
     pub fn deposit_stake<T: crate::Config>(vault_id: &T::AccountId, amount: &Amount<T>) -> Result<(), DispatchError> {
-        <reward::Pallet<T>>::deposit_stake(
-            T::GetWrappedCurrencyId::get(),
-            vault_id,
-            amount.to_signed_fixed_point()?,
-        )
+        <reward::Pallet<T>>::deposit_stake(vault_id, amount.to_signed_fixed_point()?)
     }
 
     pub fn withdraw_stake<T: crate::Config>(vault_id: &T::AccountId, amount: &Amount<T>) -> Result<(), DispatchError> {
-        <reward::Pallet<T>>::withdraw_stake(
-            T::GetWrappedCurrencyId::get(),
-            vault_id,
-            amount.to_signed_fixed_point()?,
-        )
+        <reward::Pallet<T>>::withdraw_stake(vault_id, amount.to_signed_fixed_point()?)
     }
 }
 

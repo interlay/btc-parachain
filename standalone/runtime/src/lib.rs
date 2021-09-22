@@ -282,10 +282,15 @@ impl orml_tokens::Config for Runtime {
     type DustRemovalWhitelist = DustRemovalWhitelist;
 }
 
+parameter_types! {
+    pub GetRewardCurrencyIds: Vec<CurrencyId> = vec![INTERBTC];
+}
+
 impl reward::Config for Runtime {
     type Event = Event;
     type SignedFixedPoint = SignedFixedPoint;
     type CurrencyId = CurrencyId;
+    type GetRewardCurrencyIds = GetRewardCurrencyIds;
 }
 
 impl security::Config for Runtime {
@@ -320,6 +325,7 @@ impl staking::Config for Runtime {
     type SignedFixedPoint = SignedFixedPoint;
     type SignedInner = SignedInner;
     type CurrencyId = CurrencyId;
+    type GetRewardCurrencyIds = GetRewardCurrencyIds;
 }
 
 parameter_types! {
